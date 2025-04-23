@@ -1,6 +1,7 @@
 return {
-  "Nvchad/nvcommunity",
-  { import = "nvcommunity.completion.codeium" },
+  -- "Nvchad/nvcommunity",
+  -- { import = "nvcommunity.completion.codeium" },
+  -- { "codeium.nvim", opts = { virtual_text = { enable = true } } },
 
   {
     "stevearc/conform.nvim",
@@ -83,20 +84,18 @@ return {
   --     return require "configs.null-ls"
   --   end,
   -- },
+
+  --
+  --
+
+  -- in your lazy.nvim config (or packer) for windsurf.nvim / codeium.nvim:
+  --
+  --#region
+
+  -- Remove the `use` here if you're using folke/lazy.nvim.
   {
-    "Exafunction/codeium.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "hrsh7th/nvim-cmp",
-    },
-    lazy = false,
-    config = function()
-      require("codeium").setup {
-        virtual_text = {
-          enabled = true,
-        },
-      }
-    end,
+    "Exafunction/windsurf.vim",
+    event = "BufEnter",
   },
   -- lazy.nvim
   -- Auto close tag for jsx, tsx
@@ -130,10 +129,10 @@ return {
       require("noice").setup {
         lsp = {
           hover = {
-            enabled = true, -- this will disable hover warning
+            enabled = false, -- this will disable hover warning
           },
           signature = {
-            enabled = true, -- this will disable signtature warning.
+            enabled = false, -- this will disable signtature warning.
           },
           -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
           override = {
