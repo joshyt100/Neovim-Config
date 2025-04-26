@@ -76,6 +76,43 @@ return {
     end,
   },
 
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make",
+        config = function()
+          require("telescope").load_extension "fzf"
+        end,
+      },
+    },
+    config = function()
+      local actions = require "telescope.actions"
+      require("telescope").setup {
+        defaults = {
+          prompt_prefix = "🔍 ",
+          selection_caret = " ",
+          sorting_strategy = "ascending",
+          layout_config = {
+            prompt_position = "top",
+          },
+          file_ignore_patterns = { ".git/", "node_modules/", "%.lock", "__pycache__/", "venv/", "%.pyc", "%.pyo" },
+          mappings = {
+            i = {
+              ["<esc>"] = actions.close,
+            },
+          },
+        },
+        pickers = {
+          find_files = {
+            hidden = true,
+          },
+        },
+      }
+    end,
+  },
+
   -- Null LS
   -- {
   --   "nvimtools/none-ls.nvim",
