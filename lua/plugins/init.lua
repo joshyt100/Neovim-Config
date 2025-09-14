@@ -26,6 +26,28 @@ return {
       require "configs.lspconfig"
     end,
   },
+  {
+    "nvim-lua/plenary.nvim",
+    { "nvim-tree/nvim-web-devicons", lazy = true },
+
+    {
+      "nvchad/ui",
+      config = function()
+        require "nvchad"
+      end,
+    },
+
+    {
+      "nvchad/base46",
+      lazy = true,
+      build = function()
+        require("base46").load_all_highlights()
+      end,
+    },
+  },
+
+  "nvchad/volt", -- optional, needed for theme switcher
+  -- or just use Telescope themes
   -- lazy.nvim
 
   -- Install all required plugins
@@ -39,6 +61,7 @@ return {
         "pylint",
         "black",
         "ruff",
+        "terraform-ls",
         -- For Web Development
         "typescript-language-server",
         "tailwindcss-language-server",
@@ -47,6 +70,12 @@ return {
         "eslint-lsp",
       },
     },
+  },
+
+  { "nvim-tree/nvim-web-devicons", opts = {} },
+  {
+    "SmiteshP/nvim-navic",
+    requires = "neovim/nvim-lspconfig",
   },
 
   {
@@ -86,6 +115,10 @@ return {
           require("telescope").load_extension "fzf"
         end,
       },
+    },
+    keys = {
+      { "<leader>fa", "<cmd>Telescope find_files<cr>", desc = "Find files" },
+      { "<leader>ff", "<cmd>Telescope find_files hidden=true no_ignore=true<cr>", desc = "Find all files" },
     },
     config = function()
       local actions = require "telescope.actions"
@@ -130,9 +163,27 @@ return {
   --#region
 
   -- Remove the `use` here if you're using folke/lazy.nvim.
+
   {
     "Exafunction/windsurf.vim",
     event = "BufEnter",
+    config = function()
+      vim.g.codeium_disable_bindings = 1 -- Disable default bindings like <Tab>
+
+      -- Custom keybindings
+      vim.keymap.set("i", "<C-y>", function()
+        return vim.fn["codeium#Accept"]()
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<C-;>", function()
+        return vim.fn
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<C-,>", function()
+        return vim.fn["codeium#CycleCompletions"](-1)
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<C-x>", function()
+        return vim.fn["codeium#Clear"]()
+      end, { expr = true, silent = true })
+    end,
   },
   -- lazy.nvim
   -- Auto close tag for jsx, tsx

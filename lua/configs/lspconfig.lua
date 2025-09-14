@@ -6,6 +6,7 @@ local capabilities = configs.capabilities
 require("nvchad.configs.lspconfig").defaults()
 
 local lspconfig = require "lspconfig"
+
 -- PYTHON
 lspconfig.pyright.setup {
   on_init = on_init,
@@ -16,26 +17,15 @@ lspconfig.pyright.setup {
 -- HTML
 lspconfig.emmet_ls.setup {
   filetypes = { "css", "html", "javascript", "javascriptreact", "less", "sass", "scss", "pug", "typescriptreact" },
-  -- Read more about this options in the [vscode docs](https://code.visualstudio.com/docs/editor/emmet#_emmet-configuration).
-  -- **Note:** only the options listed in the table are supported.
   init_options = {
-    ---@type table<string, string>
     includeLanguages = {},
-    --- @type string[]
     excludeLanguages = {},
-    --- @type string[]
     extensionsPath = {},
-    --- @type table<string, any> [Emmet Docs](https://docs.emmet.io/customization/preferences/)
     preferences = {},
-    --- @type boolean Defaults to `true`
     showAbbreviationSuggestions = true,
-    --- @type "always" | "never" Defaults to `"always"`
     showExpandedAbbreviation = "always",
-    --- @type boolean Defaults to `false`
     showSuggestionsAsSnippets = false,
-    --- @type table<string, any> [Emmet Docs](https://docs.emmet.io/customization/syntax-profiles/)
     syntaxProfiles = {},
-    --- @type table<string, string> [Emmet Docs](https://docs.emmet.io/customization/snippets/#variables)
     variables = {},
   },
 }
@@ -56,35 +46,40 @@ lspconfig.gopls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
 }
--- lspconfig.flake8.setup({
---   on_init = on_init,
---   on_attach = on_attach,
---   capabilities = capabilities,
--- })
+
+-- TERRAFORM (snippet support so provider completions work)
+local tf_capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), capabilities)
+tf_capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+lspconfig.terraformls.setup {
+  on_init = on_init,
+  on_attach = on_attach,
+  capabilities = capabilities,
+  -- optional: if your buffer shows ft=tf
+  -- filetypes = { "terraform", "terraform-vars", "tf" },
+}
+
 -- TAILWIND
 lspconfig.tailwindcss.setup {
   on_init = on_init,
   on_attach = on_attach,
   capabilities = capabilities,
 }
+
+-- C / C++
 lspconfig.clangd.setup {
   on_init = on_init,
   on_attach = on_attach,
   capabilities = capabilities,
 }
 
+-- CSS / SCSS / LESS
 lspconfig.cssls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
-    css = {
-      validate = true,
-    },
-    scss = {
-      validate = true,
-    },
-    less = {
-      validate = true,
-    },
+    css = { validate = true },
+    scss = { validate = true },
+    less = { validate = true },
   },
 }
